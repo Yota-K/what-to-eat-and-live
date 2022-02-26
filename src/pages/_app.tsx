@@ -11,12 +11,26 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { pathname, push } = useRouter();
   const [session, setSession] = useState<Session | null>(null);
 
+  // supabaseのCookieの設定・削除を行う
+  const handleAuthChange = async (event: AuthChangeEvent, session: Session | null) => {
+    await fetch('/api/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // URLが呼び出し元のスクリプトと同一オリジンだった場合のみ、クッキーを送信する
+      credentials: 'same-origin',
+      body: JSON.stringify({ event, session }),
+    });
+  };
+
   useEffect(() => {
     setSession(supabase.auth.session());
 
     // 認証イベントが発生するたびに通知を受け取ります。
-    supabase.auth.onAuthStateChange((_e: AuthChangeEvent, ses: Session | null) => {
+    supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
       setSession(session);
+      handleAuthChange(event, session);
     });
 
     (async () => {

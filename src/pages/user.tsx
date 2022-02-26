@@ -14,9 +14,9 @@ const User: NextPage<Props> = ({ user }) => {
   };
   return (
     <div>
+      <h1>ユーザーページ</h1>
       <p>{user.id}</p>
       <p>{user.email}</p>
-      <button onClick={handleClick}>ログアウト</button>
     </div>
   );
 };
