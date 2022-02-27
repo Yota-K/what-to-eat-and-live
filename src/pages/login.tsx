@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 import { Session } from '@supabase/supabase-js';
 import Seo from '~/components/Seo';
 import Form from '~/components/Form';
-import { StoreState } from '~/lib/redux/store';
+import { useQueryState } from '~/lib/hook/useQuery';
 import { supabase } from '~/lib/supabaseClient';
 
 const Signin: NextPage = () => {
   const [session, setSession] = useState<Session | null>(null);
-  const formState = useSelector((state: StoreState) => state.form);
+  const [form, setForm] = useQueryState<{ email: string; password: string }>('form');
   const router = useRouter();
 
   const handleSignin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { email, password } = formState;
+    const { email, password } = form;
 
     try {
       // MEMO: supabase.authでもリダイレクトの設定はできたが、正常に動作しなかった
       const { session } = await supabase.auth.signIn({ email, password });
+      setForm({ ...form, email: '', password: '' });
       setSession(session);
     } catch (er) {
       console.error(er);
@@ -29,7 +29,6 @@ const Signin: NextPage = () => {
 
   useEffect(() => {
     if (session) {
-      console.log('hoge');
       router.replace('/');
     }
   }, [session, router]);

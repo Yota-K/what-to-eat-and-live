@@ -1,7 +1,5 @@
 import { FC } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { StoreState } from '~/lib/redux/store';
-import { setFormState } from '~/lib/redux/form/slice';
+import { useQueryState } from '~/lib/hook/useQuery';
 
 type IProps = {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
@@ -15,26 +13,21 @@ type IProps = {
 };
 
 const Form: FC<IProps> = ({ onSubmit, buttonText, inputList }) => {
-  const dispatch = useDispatch();
-  const formState = useSelector((state: StoreState) => state.form);
+  const [form, setForm] = useQueryState('form', { email: '', password: '' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     if (name === 'email') {
-      dispatch(
-        setFormState({
-          ...formState,
-          email: value,
-        }),
-      );
+      setForm({
+        ...form,
+        email: value,
+      });
     } else if (name === 'password') {
-      dispatch(
-        setFormState({
-          ...formState,
-          password: value,
-        }),
-      );
+      setForm({
+        ...form,
+        password: value,
+      });
     }
   };
 

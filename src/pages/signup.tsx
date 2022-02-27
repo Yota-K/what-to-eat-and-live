@@ -1,20 +1,16 @@
 import { NextPage } from 'next';
-import { useSelector, useDispatch } from 'react-redux';
 import Seo from '~/components/Seo';
 import Form from '~/components/Form';
-import { StoreState } from '~/lib/redux/store';
+import { useQueryState } from '~/lib/hook/useQuery';
 import { supabase } from '~/lib/supabaseClient';
 
 const Signup: NextPage = () => {
-  const formState = useSelector((state: StoreState) => state.form);
+  const [form] = useQueryState<{ email: string; password: string }>('form');
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { email, password } = formState;
-
-    console.log(email);
-    console.log(password);
+    const { email, password } = form;
 
     await supabase.auth.signUp(
       { email, password },
