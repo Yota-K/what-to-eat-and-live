@@ -1,33 +1,38 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { gql } from 'graphql-request';
+import { Post } from '~/__generated__/graphql';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import Seo from '~/components/Seo';
 import { graphqlClient } from '~/lib/graphqlClient';
-import { Post } from '~/__generated__/graphql';
 
 const Posts = () => {
-  const { data, isLoading } = useQuery<Post[]>('getPosts', async () => {
-    const { getPosts } = await graphqlClient.request(gql`
-      query {
-        getPosts {
-          id
-          post
-          terms {
+  const { data, isLoading } = useQuery<Post[]>(
+    'getPosts',
+    async () => {
+      const { getPosts } = await graphqlClient.request(gql`
+        query {
+          getPosts {
             id
-            name
-          }
-          users {
-            id
-            name
+            post
+            terms {
+              id
+              name
+            }
+            users {
+              id
+              name
+            }
           }
         }
-      }
-    `);
+      `);
 
-    return getPosts;
-  });
+      return getPosts;
+    },
+    // 指定した時間経過後に再度データのフェッチを行う
+    { staleTime: 500000 },
+  );
 
   return (
     <>
