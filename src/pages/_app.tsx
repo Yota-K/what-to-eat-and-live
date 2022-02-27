@@ -10,7 +10,7 @@ import '~/styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { pathname, push } = useRouter();
-  const [session, setSession] = useState<Session | null>(null);
+  const [_session, setSession] = useState<Session | null>(null);
 
   // supabaseのCookieの設定・削除を行う
   const handleAuthChange = async (event: AuthChangeEvent, session: Session | null) => {
