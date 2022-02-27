@@ -19,7 +19,7 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <header className="p-4 shadow-md">
+    <header className="p-4 shadow-md w-full sticky top-0 left-0 z-50 bg-white">
       <div className="flex justify-between">
         <h1 className="text-xl">
           <Link href="/">何食べて生きてこ</Link>
