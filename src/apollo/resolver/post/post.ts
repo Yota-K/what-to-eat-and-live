@@ -1,15 +1,10 @@
 import { QueryResolvers } from '~/__generated__/graphql';
 import { supabase } from '~/lib/supabaseClient';
 
-// Resolver・・・GraphQLにおいて、データの操作を行うやつ
-//
-type Post = {
-  id: number;
-  post: string;
-};
-
 export const getPosts: QueryResolvers['getPosts'] = async () => {
-  const { data, error } = await supabase.from<Post>('posts').select();
+  const { data, error } = await supabase
+    .from('posts')
+    .select(`*, terms:term_id (id, name, slug), users:user_id (id, name)`);
 
   if (error) {
     console.error(error);
@@ -21,7 +16,7 @@ export const getPosts: QueryResolvers['getPosts'] = async () => {
 
 export const getPost: QueryResolvers['getPost'] = async (_, { id }) => {
   const { data, error } = await supabase
-    .from<Post>('posts')
+    .from('posts')
     .select()
     .match({
       id,

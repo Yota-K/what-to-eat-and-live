@@ -16,8 +16,11 @@ export type Scalars = {
 
 export type Post = {
   __typename?: 'Post';
+  created_at: Scalars['String'];
   id: Scalars['Int'];
   post: Scalars['String'];
+  terms?: Maybe<Term>;
+  users?: Maybe<User>;
 };
 
 export type Query = {
@@ -29,6 +32,20 @@ export type Query = {
 
 export type QueryGetPostArgs = {
   id: Scalars['Int'];
+};
+
+export type Term = {
+  __typename?: 'Term';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  slug: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  email: Scalars['String'];
+  id: Scalars['Int'];
+  name: Scalars['String'];
 };
 
 
@@ -105,6 +122,8 @@ export type ResolversTypes = {
   Post: ResolverTypeWrapper<Post>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Term: ResolverTypeWrapper<Term>;
+  User: ResolverTypeWrapper<User>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -114,11 +133,16 @@ export type ResolversParentTypes = {
   Post: Post;
   Query: {};
   String: Scalars['String'];
+  Term: Term;
+  User: User;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
+  created_at?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   post?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  terms?: Resolver<Maybe<ResolversTypes['Term']>, ParentType, ContextType>;
+  users?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -127,8 +151,24 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getPosts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType>;
 };
 
+export type TermResolvers<ContextType = any, ParentType extends ResolversParentTypes['Term'] = ResolversParentTypes['Term']> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Term?: TermResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 };
 
