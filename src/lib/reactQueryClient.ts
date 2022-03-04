@@ -7,6 +7,8 @@ export const queryClient = new QueryClient({
       retry: false,
       // デフォルトだとユーザーがブラウザのコンポーネントにフォーカスを当てた時に自動でフェッチが動くようになっている
       refetchOnWindowFocus: false,
+      // キャッシュを保持する時間
+      cacheTime: 300000,
     },
   },
 });
