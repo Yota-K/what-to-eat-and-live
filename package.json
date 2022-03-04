@@ -10,6 +10,8 @@
     "generate": "graphql-codegen"
   },
   "dependencies": {
+    "@headlessui/react": "^1.5.0",
+    "@heroicons/react": "^1.0.6",
     "@supabase/supabase-js": "^1.30.4",
     "apollo-server-micro": "^3.6.3",
     "graphql": "^16.3.0",
