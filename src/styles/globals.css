@@ -2,7 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* tailwindのテーマで設定できるなら設定したい */
+
 /* フォームのオートコンプリート使用時に背景色を変更しないようにする */
 input:-webkit-autofill {
   box-shadow: 0 0 0 1000px white inset;
+}
+
+textarea:focus-visible {
+  border-color: transparent;
+  outline: none;
+}
+
+textarea:focus {
+  border-color: transparent;
+  outline: none;
 }
