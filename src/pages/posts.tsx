@@ -5,7 +5,7 @@ import { Post } from '~/__generated__/graphql';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import Seo from '~/components/Seo';
-import Tweet from '~/components/Tweet';
+import Tweet from '~/components/PostsPage/Tweet';
 import { graphqlClient } from '~/lib/graphqlClient';
 
 const Posts = () => {

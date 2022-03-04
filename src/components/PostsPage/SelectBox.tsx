@@ -1,6 +1,8 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { useQueryState } from '~/lib/hook/useQuery';
+import { TweetData } from '~/types/TweetData';
 
 const SelectBox: React.FC = () => {
   const meals = [
@@ -11,7 +13,20 @@ const SelectBox: React.FC = () => {
     { id: 5, name: '昼食' },
   ];
 
+  const [tweetData, setTweetData] = useQueryState<TweetData>('tweetData');
+
   const [selected, setSelected] = useState(meals[0]);
+
+  useEffect(() => {
+    const { id, name } = selected;
+    setTweetData({
+      ...tweetData,
+      term: {
+        id,
+        name,
+      },
+    });
+  }, [selected]);
 
   return (
     <div className="w-72 absolute top-0 left-0">
@@ -24,7 +39,7 @@ const SelectBox: React.FC = () => {
             </span>
           </Listbox.Button>
           <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-            <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Listbox.Options className="relative w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {meals.map((meal, i) => (
                 <Listbox.Option
                   key={i}
@@ -35,6 +50,7 @@ const SelectBox: React.FC = () => {
                   }
                   value={meal}
                 >
+                  {/* MEMO: チェックマークが出ない */}
                   {({ selected }) => (
                     <>
                       <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{meal.name}</span>
