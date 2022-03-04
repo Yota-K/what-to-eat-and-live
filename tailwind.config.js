@@ -10,5 +10,9 @@ module.exports = {
     extend: {},
   },
   content: [],
+  variants: {
+    opacity: ['disabled'],
+    pointerEvents: ['disabled'],
+  },
   plugins: [],
 };
