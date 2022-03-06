@@ -5,9 +5,10 @@ import { Post } from '~/__generated__/graphql';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import Seo from '~/components/Seo';
+import PostItem from '~/components/PostsPage/PostItem';
 import Tweet from '~/components/PostsPage/Tweet';
-import { graphqlClient } from '~/lib/graphqlClient';
 
+import { graphqlClient } from '~/lib/graphqlClient';
 const Posts = () => {
   const { data, isLoading } = useQuery<Post[]>(
     'getPosts',
@@ -46,13 +47,7 @@ const Posts = () => {
         ) : (
           <div>
             {data?.map((e, i) => (
-              <div key={i} className="border rounded-md p-4 my-5">
-                <div>
-                  <a href={e.users?.name}>{e.users?.name}</a>
-                  <a href={e.terms?.name}>{e.terms?.name}</a>
-                </div>
-                <div dangerouslySetInnerHTML={{ __html: e.post }} />
-              </div>
+              <PostItem key={i} users={e.users} terms={e.terms} post={e.post} />
             ))}
           </div>
         )}
