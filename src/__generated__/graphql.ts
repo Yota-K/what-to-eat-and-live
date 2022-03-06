@@ -14,6 +14,24 @@ export type Scalars = {
   Float: number;
 };
 
+export type MutateResponse = {
+  __typename?: 'MutateResponse';
+  message?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createPost: MutateResponse;
+};
+
+
+export type MutationCreatePostArgs = {
+  body: Scalars['String'];
+  termId: Scalars['Int'];
+  userId: Scalars['Int'];
+};
+
 export type Post = {
   __typename?: 'Post';
   created_at: Scalars['String'];
@@ -119,6 +137,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  MutateResponse: ResolverTypeWrapper<MutateResponse>;
+  Mutation: ResolverTypeWrapper<{}>;
   Post: ResolverTypeWrapper<Post>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -130,11 +150,23 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Int: Scalars['Int'];
+  MutateResponse: MutateResponse;
+  Mutation: {};
   Post: Post;
   Query: {};
   String: Scalars['String'];
   Term: Term;
   User: User;
+};
+
+export type MutateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MutateResponse'] = ResolversParentTypes['MutateResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createPost?: Resolver<ResolversTypes['MutateResponse'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'body' | 'termId' | 'userId'>>;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
@@ -166,6 +198,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type Resolvers<ContextType = any> = {
+  MutateResponse?: MutateResponseResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Term?: TermResolvers<ContextType>;

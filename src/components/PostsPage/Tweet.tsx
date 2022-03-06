@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
+import { useMutation } from 'react-query';
+import { gql } from 'graphql-request';
+import { Post } from '~/__generated__/graphql';
 import { useQueryState } from '~/lib/hook/useQuery';
 import SelectBox from '~/components/PostsPage/SelectBox';
 import { TweetData } from '~/types/TweetData';
+import { graphqlClient } from '~/lib/graphqlClient';
 
 const Tweet = () => {
   const [tweetData, setTweetData] = useQueryState<TweetData>('tweetData', {
@@ -26,6 +30,28 @@ const Tweet = () => {
     });
   }, [tweetData]);
 
+  const create = async () => {
+    const query = gql`
+      mutation CreatePost($body: String!, $userId: Int!, $termId: Int!) {
+        createPost(body: $body, userId: $userId, termId: $termId) {
+          success
+          message
+        }
+      }
+    `;
+
+    const res = await graphqlClient.request<{ success: boolean; message: string }>(query, {
+      body: tweetData.tweet,
+      userId: 1,
+      termId: tweetData.term.id,
+    });
+    console.log(res);
+    return {
+      success: res.success,
+      message: res.message,
+    };
+  };
+
   return (
     <>
       <div className="border rounded-md p-4">
@@ -41,6 +67,7 @@ const Tweet = () => {
           <button
             className="bg-blue-500 text-white p-2 rounded-3xl disabled:opacity-50 disabled:pointer-events-none"
             disabled={tweetData.tweet ? false : true}
+            onClick={create}
           >
             ツイートする
           </button>
