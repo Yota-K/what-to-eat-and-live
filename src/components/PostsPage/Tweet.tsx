@@ -15,6 +15,7 @@ const Tweet = () => {
       name: '朝ごはん',
     },
   });
+  const { tweet } = tweetData;
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTweetData({
@@ -24,10 +25,12 @@ const Tweet = () => {
   };
 
   useEffect(() => {
-    setTweetData({
-      ...tweetData,
-      tweet: tweetData.tweet,
-    });
+    if (tweetData.tweet !== '') {
+      setTweetData({
+        ...tweetData,
+        tweet,
+      });
+    }
   }, [tweetData]);
 
   const create = async () => {
@@ -58,7 +61,6 @@ const Tweet = () => {
         <textarea
           placeholder="今日食べたものをツイートしましょう。"
           onChange={handleChange}
-          value={tweetData.tweet}
           className="w-full h-24 text-xl resize-none"
         ></textarea>
         <div className="border-b border-gray-300 mt-2 mb-6"></div>
@@ -66,7 +68,7 @@ const Tweet = () => {
           <SelectBox />
           <button
             className="bg-blue-500 text-white p-2 rounded-3xl disabled:opacity-50 disabled:pointer-events-none"
-            disabled={tweetData.tweet ? false : true}
+            disabled={tweet ? false : true}
             onClick={create}
           >
             ツイートする
