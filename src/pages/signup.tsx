@@ -27,7 +27,7 @@ const Signup: NextPage = () => {
 
   return (
     <>
-      <Seo title="会員登録" description="デスクリプション" />
+      <Seo title="会員登録" description="ディスクリプション" />
       <h1 className="text-center text-2xl font-bold mt-6">会員登録</h1>
       <Form onSubmit={handleSignup} inputList={inputList} buttonText="サインアップ" />
     </>

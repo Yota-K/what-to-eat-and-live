@@ -1,18 +1,19 @@
 import React from 'react';
-import { Post } from '~/__generated__/graphql';
 
 type Props = {
-  users: Post['users'];
-  terms: Post['terms'];
-  post: Post['post'];
+  name: string;
+  term: {
+    name: string;
+  };
+  post: string;
 };
 
-const PostItem: React.FC<Props> = ({ users, terms, post }) => {
+const PostItem: React.FC<Props> = ({ name, term, post }) => {
   return (
     <div className="border rounded-md p-4 my-5">
       <div>
-        <a href={users?.name}>{users?.name}</a>
-        <a href={terms?.name}>{terms?.name}</a>
+        <a href={name}>{name}</a>
+        <a href={term.name}>{term.name}</a>
       </div>
       <div dangerouslySetInnerHTML={{ __html: post }} />
     </div>
