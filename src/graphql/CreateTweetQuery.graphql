@@ -1,0 +1,6 @@
+mutation CreatePost($body: String!, $userId: Int!, $termId: Int!) {
+  createPost(body: $body, userId: $userId, termId: $termId) {
+    success
+    message
+  }
+}

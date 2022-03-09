@@ -1,10 +1,17 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLClient } from 'graphql-request';
+import { RequestInit } from 'graphql-request/dist/types.dom';
+import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
+
+function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
+  return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -206,3 +213,70 @@ export type Resolvers<ContextType = any> = {
   User?: UserResolvers<ContextType>;
 };
 
+
+export type CreatePostMutationVariables = Exact<{
+  body: Scalars['String'];
+  userId: Scalars['Int'];
+  termId: Scalars['Int'];
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'MutateResponse', success: boolean, message?: string | null } };
+
+export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPostsQuery = { __typename?: 'Query', getPosts?: Array<{ __typename?: 'Post', id: number, post: string, terms?: { __typename?: 'Term', id: number, name: string } | null, users?: { __typename?: 'User', id: number, name: string } | null } | null> | null };
+
+
+export const CreatePostDocument = `
+    mutation CreatePost($body: String!, $userId: Int!, $termId: Int!) {
+  createPost(body: $body, userId: $userId, termId: $termId) {
+    success
+    message
+  }
+}
+    `;
+export const useCreatePostMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<CreatePostMutation, TError, CreatePostMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<CreatePostMutation, TError, CreatePostMutationVariables, TContext>(
+      ['CreatePost'],
+      (variables?: CreatePostMutationVariables) => fetcher<CreatePostMutation, CreatePostMutationVariables>(client, CreatePostDocument, variables, headers)(),
+      options
+    );
+export const GetPostsDocument = `
+    query GetPosts {
+  getPosts {
+    id
+    post
+    terms {
+      id
+      name
+    }
+    users {
+      id
+      name
+    }
+  }
+}
+    `;
+export const useGetPostsQuery = <
+      TData = GetPostsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: GetPostsQueryVariables,
+      options?: UseQueryOptions<GetPostsQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetPostsQuery, TError, TData>(
+      variables === undefined ? ['GetPosts'] : ['GetPosts', variables],
+      fetcher<GetPostsQuery, GetPostsQueryVariables>(client, GetPostsDocument, variables, headers),
+      options
+    );

@@ -1,0 +1,14 @@
+query GetPosts {
+  getPosts {
+    id
+    post
+    terms {
+      id
+      name
+    }
+    users {
+      id
+      name
+    }
+  }
+}
