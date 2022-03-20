@@ -5,12 +5,11 @@ import { findUserData } from './user';
 /*
  * つぶやき一覧を取得
  */
-export const getPosts: QueryResolvers['getPosts'] = async (_, args, context) => {
-  const uuid = context.currentUserId;
-
+export const getPosts: QueryResolvers['getPosts'] = async () => {
   const { data, error } = await supabase
     .from('posts')
-    .select(`*, terms:term_id (id, name, slug), users:user_id (id, name)`);
+    .select(`*, terms:term_id (id, name, slug), users:user_id (id, name)`)
+    .order('created_at', { ascending: false });
 
   if (error) {
     console.error(error);
