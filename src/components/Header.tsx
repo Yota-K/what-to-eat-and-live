@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Session, AuthChangeEvent } from '@supabase/supabase-js';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { Session, AuthChangeEvent } from '@supabase/supabase-js';
 import { supabase } from '~/lib/supabaseClient';
 
 const Header: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
+  const router = useRouter();
 
   const signOut = () => {
     supabase.auth.signOut();
+    // ログアウト後はトップページにリダイレクトする
+    router.replace('/');
   };
 
   useEffect(() => {
