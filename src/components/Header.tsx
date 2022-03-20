@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Session, AuthChangeEvent } from '@supabase/supabase-js';
+import { useSupabaseSession } from '~/lib/hook/useSupabaseSession';
 import { supabase } from '~/lib/supabaseClient';
 
 const Header: React.FC = () => {
-  const [session, setSession] = useState<Session | null>(null);
   const router = useRouter();
 
   const signOut = () => {
@@ -14,13 +13,7 @@ const Header: React.FC = () => {
     router.replace('/');
   };
 
-  useEffect(() => {
-    setSession(supabase.auth.session());
-
-    supabase.auth.onAuthStateChange((_e: AuthChangeEvent, ses: Session | null) => {
-      setSession(session);
-    });
-  }, []);
+  const [session] = useSupabaseSession();
 
   return (
     <header className="p-4 shadow-md w-full sticky top-0 left-0 z-50 bg-white">
