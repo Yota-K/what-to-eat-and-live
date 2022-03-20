@@ -1,10 +1,13 @@
 import { QueryResolvers, MutationResolvers } from '~/__generated__/graphql';
 import { supabase } from '~/lib/supabaseClient';
+import { findUserData } from './user';
 
 /*
  * つぶやき一覧を取得
  */
-export const getPosts: QueryResolvers['getPosts'] = async () => {
+export const getPosts: QueryResolvers['getPosts'] = async (_, args, context) => {
+  const uuid = context.currentUserId;
+
   const { data, error } = await supabase
     .from('posts')
     .select(`*, terms:term_id (id, name, slug), users:user_id (id, name)`);
@@ -20,10 +23,10 @@ export const getPosts: QueryResolvers['getPosts'] = async () => {
 /*
  * 特定のつぶやきを取得
  */
-export const getPost: QueryResolvers['getPost'] = async (_, { id }) => {
+export const findPost: QueryResolvers['findPost'] = async (_, { id }) => {
   const { data, error } = await supabase
     .from('posts')
-    .select()
+    .select(`*, terms:term_id (id, name, slug), users:user_id (id, name)`)
     .match({
       id,
     })
@@ -42,17 +45,18 @@ export const getPost: QueryResolvers['getPost'] = async (_, { id }) => {
  */
 export const createPost: MutationResolvers['createPost'] = async (_, args, context) => {
   // リクエストの検証
-  const currentUserId = context.currentUserId;
+  const uuid = context.currentUserId;
+  const userData = await findUserData(uuid);
 
   console.log(context);
   console.log(args);
 
-  if (!currentUserId) throw new Error('userId is not seting.');
+  if (!uuid) throw new Error('uuid is not seting.');
 
   try {
     const { data, error } = await supabase.from('posts').insert({
       post: args.body,
-      user_id: args.userId,
+      user_id: userData.id,
       term_id: args.termId,
     });
 

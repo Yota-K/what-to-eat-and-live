@@ -55,7 +55,7 @@ const Tweet = () => {
           <button
             className="bg-blue-500 text-white p-2 rounded-3xl disabled:opacity-50 disabled:pointer-events-none"
             disabled={tweet ? false : true}
-            onClick={() => mutate({ body: tweetData.tweet, userId: 1, termId: tweetData.term.id })}
+            onClick={() => mutate({ body: tweetData.tweet, termId: tweetData.term.id })}
           >
             ツイートする
           </button>
