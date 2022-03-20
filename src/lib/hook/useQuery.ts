@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from 'react-query';
 
-export const useQueryState = <T>(queryKey: string, data?: T): [T, (arg: T) => T] => {
+export const useQueryState = <T>(queryKey: string | string[], data?: T): [T, (arg: T) => T] => {
   // enabled falseに設定すると、フェッチを行う関数の呼び出しを抑制することができる
   const stateValue = useQuery<T>(queryKey, {
     enabled: false,

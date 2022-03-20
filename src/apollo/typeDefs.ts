@@ -19,12 +19,23 @@ export const typeDefs: Config['typeDefs'] = gql`
   type User {
     id: Int!
     name: String!
+    uuid: String!
     email: String!
+  }
+
+  type MutateResponse {
+    success: Boolean!
+    message: String
   }
 
   # RestAPIでいうGet系の定義
   type Query {
-    getPost(id: Int!): Post
     getPosts: [Post]
+    findPost(id: Int!): Post
+  }
+
+  # RestAPIでいうPost系の定義
+  type Mutation {
+    createPost(body: String!, termId: Int!): MutateResponse!
   }
 `;

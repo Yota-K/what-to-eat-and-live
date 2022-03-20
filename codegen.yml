@@ -1,7 +1,12 @@
 overwrite: true
-schema: './src/apollo/typeDefs.ts'
+schema: http://localhost:3333/api/graphql
 generates:
   src/__generated__/graphql.ts:
+    documents: 'src/**/*.graphql'
     plugins:
-      - 'typescript'
-      - 'typescript-resolvers'
+      - typescript
+      - typescript-resolvers
+      - typescript-operations
+      - typescript-react-query
+    config:
+      fetcher: graphql-request

@@ -1,0 +1,14 @@
+query findPost($id: Int!) {
+  findPost(id: $id) {
+    id
+    post
+    terms {
+      id
+      name
+    }
+    users {
+      id
+      name
+    }
+  }
+}

@@ -1,10 +1,17 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLClient } from 'graphql-request';
+import { RequestInit } from 'graphql-request/dist/types.dom';
+import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
+
+function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
+  return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -12,6 +19,23 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+};
+
+export type MutateResponse = {
+  __typename?: 'MutateResponse';
+  message?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createPost: MutateResponse;
+};
+
+
+export type MutationCreatePostArgs = {
+  body: Scalars['String'];
+  termId: Scalars['Int'];
 };
 
 export type Post = {
@@ -25,12 +49,12 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
-  getPost?: Maybe<Post>;
+  findPost?: Maybe<Post>;
   getPosts?: Maybe<Array<Maybe<Post>>>;
 };
 
 
-export type QueryGetPostArgs = {
+export type QueryFindPostArgs = {
   id: Scalars['Int'];
 };
 
@@ -46,6 +70,7 @@ export type User = {
   email: Scalars['String'];
   id: Scalars['Int'];
   name: Scalars['String'];
+  uuid: Scalars['String'];
 };
 
 
@@ -119,6 +144,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  MutateResponse: ResolverTypeWrapper<MutateResponse>;
+  Mutation: ResolverTypeWrapper<{}>;
   Post: ResolverTypeWrapper<Post>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -130,11 +157,23 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Int: Scalars['Int'];
+  MutateResponse: MutateResponse;
+  Mutation: {};
   Post: Post;
   Query: {};
   String: Scalars['String'];
   Term: Term;
   User: User;
+};
+
+export type MutateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MutateResponse'] = ResolversParentTypes['MutateResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createPost?: Resolver<ResolversTypes['MutateResponse'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'body' | 'termId'>>;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
@@ -147,7 +186,7 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryGetPostArgs, 'id'>>;
+  findPost?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryFindPostArgs, 'id'>>;
   getPosts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Post']>>>, ParentType, ContextType>;
 };
 
@@ -162,13 +201,119 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  MutateResponse?: MutateResponseResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Term?: TermResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 
+
+export type CreatePostMutationVariables = Exact<{
+  body: Scalars['String'];
+  termId: Scalars['Int'];
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'MutateResponse', success: boolean, message?: string | null } };
+
+export type FindPostQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type FindPostQuery = { __typename?: 'Query', findPost?: { __typename?: 'Post', id: number, post: string, terms?: { __typename?: 'Term', id: number, name: string } | null, users?: { __typename?: 'User', id: number, name: string } | null } | null };
+
+export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPostsQuery = { __typename?: 'Query', getPosts?: Array<{ __typename?: 'Post', id: number, post: string, terms?: { __typename?: 'Term', id: number, name: string } | null, users?: { __typename?: 'User', id: number, name: string } | null } | null> | null };
+
+
+export const CreatePostDocument = `
+    mutation CreatePost($body: String!, $termId: Int!) {
+  createPost(body: $body, termId: $termId) {
+    success
+    message
+  }
+}
+    `;
+export const useCreatePostMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<CreatePostMutation, TError, CreatePostMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<CreatePostMutation, TError, CreatePostMutationVariables, TContext>(
+      ['CreatePost'],
+      (variables?: CreatePostMutationVariables) => fetcher<CreatePostMutation, CreatePostMutationVariables>(client, CreatePostDocument, variables, headers)(),
+      options
+    );
+export const FindPostDocument = `
+    query findPost($id: Int!) {
+  findPost(id: $id) {
+    id
+    post
+    terms {
+      id
+      name
+    }
+    users {
+      id
+      name
+    }
+  }
+}
+    `;
+export const useFindPostQuery = <
+      TData = FindPostQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: FindPostQueryVariables,
+      options?: UseQueryOptions<FindPostQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<FindPostQuery, TError, TData>(
+      ['findPost', variables],
+      fetcher<FindPostQuery, FindPostQueryVariables>(client, FindPostDocument, variables, headers),
+      options
+    );
+export const GetPostsDocument = `
+    query GetPosts {
+  getPosts {
+    id
+    post
+    terms {
+      id
+      name
+    }
+    users {
+      id
+      name
+    }
+  }
+}
+    `;
+export const useGetPostsQuery = <
+      TData = GetPostsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: GetPostsQueryVariables,
+      options?: UseQueryOptions<GetPostsQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetPostsQuery, TError, TData>(
+      variables === undefined ? ['GetPosts'] : ['GetPosts', variables],
+      fetcher<GetPostsQuery, GetPostsQueryVariables>(client, GetPostsDocument, variables, headers),
+      options
+    );

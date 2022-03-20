@@ -1,9 +1,12 @@
-import { getPosts, getPost } from './post/post';
+import { getPosts, findPost, createPost } from './post';
 
 // Resolver・・・GraphQLにおいて、データの操作を行うやつ
 export const resolvers = {
   Query: {
     getPosts,
-    getPost,
+    findPost,
+  },
+  Mutation: {
+    createPost,
   },
 };
