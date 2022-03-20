@@ -18,6 +18,7 @@ type Props = {
 const Posts: React.FC<Props> = ({ user }) => {
   const { title } = APP;
   const { data, isLoading } = useGetPostsQuery<GetPostsQuery, Error>(graphqlClient);
+  console.log(data);
 
   // MEMO: as stringなんとかしたいな
   return (
@@ -30,14 +31,21 @@ const Posts: React.FC<Props> = ({ user }) => {
           <div>Loaging...</div>
         ) : (
           <div>
-            {data?.getPosts?.map((e, i) => (
-              <PostItem
-                key={i}
-                name={e?.users?.name as string}
-                term={{ name: e?.terms?.name as string }}
-                post={e?.post as string}
-              />
-            ))}
+            {data ? (
+              <>
+                {data.getPosts?.map((e, i) => (
+                  <PostItem
+                    key={i}
+                    userName={e?.users?.name as string}
+                    term={{ name: e?.terms?.name as string }}
+                    createdAt={e?.created_at as string}
+                    post={e?.post as string}
+                  />
+                ))}
+              </>
+            ) : (
+              <p>つぶやきがありません</p>
+            )}
           </div>
         )}
       </Layout>

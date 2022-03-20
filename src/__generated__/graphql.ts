@@ -276,6 +276,7 @@ export type GetPostsQuery = {
     __typename?: 'Post';
     id: number;
     post: string;
+    created_at: string;
     terms?: { __typename?: 'Term'; id: number; name: string } | null;
     users?: { __typename?: 'User'; id: number; name: string } | null;
   } | null> | null;
@@ -332,6 +333,7 @@ export const GetPostsDocument = `
   getPosts {
     id
     post
+    created_at
     terms {
       id
       name
