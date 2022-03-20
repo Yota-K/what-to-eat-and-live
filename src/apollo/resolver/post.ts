@@ -43,8 +43,10 @@ export const findPost: QueryResolvers['findPost'] = async (_, { id }) => {
  * つぶやきを投稿
  */
 export const createPost: MutationResolvers['createPost'] = async (_, args, context) => {
-  // リクエストの検証
+  // uuidの取得
   const uuid = context.currentUserId;
+
+  // ユーザー情報の取得
   const userData = await findUserData(uuid);
 
   console.log(context);
