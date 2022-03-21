@@ -1,3 +1,4 @@
+import type { NextPage } from 'next';
 import React from 'react';
 import { GetPostsQuery, useGetPostsQuery } from '~/__generated__/graphql';
 import Header from '~/components/Header';
@@ -9,7 +10,7 @@ import { useSupabaseSession } from '~/lib/hook/useSupabaseSession';
 import { graphqlClient } from '~/lib/graphqlClient';
 import { APP } from '~/config/app';
 
-const Posts: React.FC = () => {
+const Posts: NextPage = () => {
   const { title } = APP;
   const { data, isLoading } = useGetPostsQuery<GetPostsQuery, Error>(graphqlClient);
   console.log(data);
@@ -37,7 +38,7 @@ const Posts: React.FC = () => {
                   <PostItem
                     key={i}
                     userName={e?.users?.name as string}
-                    term={{ name: e?.terms?.name as string }}
+                    term={{ name: e?.terms?.name as string, slug: e?.terms?.slug as string }}
                     createdAt={e?.created_at as string}
                     post={e?.post as string}
                   />

@@ -1,10 +1,11 @@
 import React from 'react';
 import { parseISO, format } from 'date-fns';
-import TermName from './TermName';
+import TermLinkButton from './TermLinkButton';
 
 type Props = {
   userName: string;
   term: {
+    slug: string;
     name: string;
   };
   createdAt: string;
@@ -25,11 +26,9 @@ const PostItem: React.FC<Props> = ({ userName, term, createdAt, post }) => {
 
   return (
     <div className="border rounded-md p-4 my-5">
-      <div>
-        <a href={term.name} className="text-lg">
-          <span className="inline-flex items-center">{TermName(term.name)}</span>
-        </a>
-        <time dateTime={time} className="text-sm align-text-bottom">
+      <div className="mb-2">
+        <TermLinkButton termLink={term.slug} termName={term.name} />
+        <time dateTime={time} className="text-sm align-bottom">
           {time}
         </time>
       </div>
