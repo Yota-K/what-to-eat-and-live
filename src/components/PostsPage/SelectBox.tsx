@@ -1,18 +1,18 @@
 import { Fragment, useEffect } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
-import { useQueryState } from '~/lib/hook/useQuery';
 import { TweetData } from '~/types/TweetData';
 
+type Term = Pick<TweetData, 'term'>['term'];
 type Props = {
-  meals: { id: number; name: string }[];
-  selected: { id: number; name: string };
-  setSelected: React.Dispatch<React.SetStateAction<{ id: number; name: string }>>;
+  meals: Term[];
+  selected: Term;
+  setSelected: React.Dispatch<React.SetStateAction<Term>>;
+  tweetData: TweetData;
+  setTweetData: React.Dispatch<React.SetStateAction<TweetData>>;
 };
 
-const SelectBox: React.FC<Props> = ({ meals, selected, setSelected }) => {
-  const [tweetData, setTweetData] = useQueryState<TweetData>('tweetData');
-
+const SelectBox: React.FC<Props> = ({ meals, selected, setSelected, tweetData, setTweetData }) => {
   useEffect(() => {
     const { id, name } = selected;
     setTweetData({
