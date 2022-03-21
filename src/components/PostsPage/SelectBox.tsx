@@ -46,7 +46,6 @@ const SelectBox: React.FC<Props> = ({ meals, selected, setSelected }) => {
                   }
                   value={meal}
                 >
-                  {/* MEMO: チェックマークが出ない */}
                   {({ selected }) => (
                     <>
                       <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{meal.name}</span>

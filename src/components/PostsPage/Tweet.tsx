@@ -1,19 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { useQueryClient } from 'react-query';
 import { CreatePostMutation, CreatePostMutationVariables, useCreatePostMutation } from '~/__generated__/graphql';
-import { useQueryState } from '~/lib/hook/useQuery';
 import SelectBox from '~/components/PostsPage/SelectBox';
-import { TweetData } from '~/types/TweetData';
+import { useQueryState } from '~/lib/hook/useQuery';
 import { graphqlClient } from '~/lib/graphqlClient';
+import { TweetData } from '~/types/TweetData';
+import { meals } from '~/config/selectBoxList';
 
 const Tweet = () => {
-  const meals = [
-    { id: 1, name: '朝ごはん' },
-    { id: 2, name: '昼ごはん' },
-    { id: 3, name: '夜ごはん' },
-    { id: 4, name: '夜食' },
-    { id: 5, name: '昼食' },
-  ];
   const [selected, setSelected] = useState(meals[0]);
   const textareaEl = useRef<HTMLTextAreaElement>(null);
 

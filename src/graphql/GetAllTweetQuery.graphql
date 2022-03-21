@@ -2,9 +2,11 @@ query GetPosts {
   getPosts {
     id
     post
+    created_at
     terms {
       id
       name
+      slug
     }
     users {
       id
