@@ -37,6 +37,9 @@ const Tweet = () => {
   const submitTweet = () => {
     if (!textareaEl.current) return;
 
+    mutate({ body: tweetData.tweet.trim(), termId: tweetData.term.id });
+
+    // State・textareaのvalueの初期化
     setTweetData({
       ...tweetData,
       tweet: '',
@@ -46,10 +49,9 @@ const Tweet = () => {
       },
     });
 
-    textareaEl.current.value = '';
     setSelected(meals[0]);
 
-    mutate({ body: tweetData.tweet, termId: tweetData.term.id });
+    textareaEl.current.value = '';
   };
 
   return (
@@ -59,6 +61,7 @@ const Tweet = () => {
           placeholder="今日食べたものをツイートしましょう。"
           onChange={handleChange}
           className="w-full h-24 text-xl resize-none"
+          maxLength={150}
           ref={textareaEl}
         ></textarea>
         <div className="border-b border-gray-300 mt-2 mb-6"></div>
