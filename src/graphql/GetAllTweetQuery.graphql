@@ -6,6 +6,7 @@ query GetPosts {
     terms {
       id
       name
+      slug
     }
     users {
       id
